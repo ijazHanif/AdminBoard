@@ -1,9 +1,11 @@
 import React from 'react'
-import Page from './dashboard/page'
+import { Label } from "@/components/ui/label"
+
+
 const page = () => {
   return (
     <div>
-       <Page/>
+       <Label htmlFor="email">Your email address</Label>
     </div>
   )
 }
