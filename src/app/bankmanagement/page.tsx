@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Typography } from "@/components/ui/Typography";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const Page = () => {
   const initialBankAccounts: BankAccount[] = [
@@ -37,6 +38,7 @@ const Page = () => {
       purpose: "Retirement savings",
     },
   ];
+
   const [accounts, setAccounts] = useState<BankAccount[]>(initialBankAccounts);
   const [newAccount, setNewAccount] = useState<BankAccount>({
     id: "",
@@ -45,13 +47,24 @@ const Page = () => {
     accountTitle: "",
     purpose: "",
   });
+  const [isEdit, setIsEdit] = useState(false);
 
-  // Function to add a new account
-  const handleAddAccount = () => {
-    setAccounts([
-      ...accounts,
-      { ...newAccount, id: (accounts.length + 1).toString() },
-    ]);
+  // Function to add or edit an account
+  const handleSaveAccount = () => {
+    if (isEdit) {
+      setAccounts(
+        accounts.map((account) =>
+          account.id === newAccount.id ? newAccount : account
+        )
+      );
+    } else {
+      setAccounts([
+        ...accounts,
+        { ...newAccount, id: (accounts.length + 1).toString() },
+      ]);
+    }
+
+    // Reset form and state
     setNewAccount({
       id: "",
       nickname: "",
@@ -59,6 +72,7 @@ const Page = () => {
       accountTitle: "",
       purpose: "",
     });
+    setIsEdit(false);
   };
 
   // Function to delete an account by its ID
@@ -66,46 +80,17 @@ const Page = () => {
     setAccounts(accounts.filter((account) => account.id !== id));
   };
 
+  // Function to handle edit
+  const handleEditAccount = (account: BankAccount) => {
+    setNewAccount(account);
+    setIsEdit(true);
+  };
+
   return (
     <div className="p-6">
       <Typography variant="h1" className="mb-4 text-2xl font-semibold">
         Bank Management
       </Typography>
-
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <Input
-          placeholder="Nickname"
-          value={newAccount.nickname}
-          onChange={(e) =>
-            setNewAccount({ ...newAccount, nickname: e.target.value })
-          }
-          required
-        />
-        <Input
-          placeholder="Account Number (optional)"
-          value={newAccount.accountNumber}
-          onChange={(e) =>
-            setNewAccount({ ...newAccount, accountNumber: e.target.value })
-          }
-        />
-        <Input
-          placeholder="Account Title (optional)"
-          value={newAccount.accountTitle}
-          onChange={(e) =>
-            setNewAccount({ ...newAccount, accountTitle: e.target.value })
-          }
-        />
-        <Input
-          placeholder="Purpose (optional)"
-          value={newAccount.purpose}
-          onChange={(e) =>
-            setNewAccount({ ...newAccount, purpose: e.target.value })
-          }
-        />
-        <div className="col-span-1 md:col-span-2">
-          <Button onClick={handleAddAccount}>Add Account</Button>
-        </div>
-      </form>
 
       <div className="overflow-x-auto">
         <Table className="min-w-full table-fixed border border-gray-300">
@@ -144,18 +129,120 @@ const Page = () => {
                 <TableCell className="w-1/5 px-4 py-2 border">
                   {account.purpose}
                 </TableCell>
-                <TableCell className="w-1/5 px-4 py-2 border">
+                <TableCell className="w-1/5 px-4 py-2 border flex gap-2">
                   <Button
                     variant="destructive"
                     onClick={() => handleDeleteAccount(account.id)}
                   >
                     Delete
                   </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="outline" onClick={() => handleEditAccount(account)}>
+                        Edit
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <form className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <Input
+                          placeholder="Nickname"
+                          value={newAccount.nickname}
+                          onChange={(e) =>
+                            setNewAccount({
+                              ...newAccount,
+                              nickname: e.target.value,
+                            })
+                          }
+                          required
+                        />
+                        <Input
+                          placeholder="Account Number (optional)"
+                          value={newAccount.accountNumber}
+                          onChange={(e) =>
+                            setNewAccount({
+                              ...newAccount,
+                              accountNumber: e.target.value,
+                            })
+                          }
+                        />
+                        <Input
+                          placeholder="Account Title (optional)"
+                          value={newAccount.accountTitle}
+                          onChange={(e) =>
+                            setNewAccount({
+                              ...newAccount,
+                              accountTitle: e.target.value,
+                            })
+                          }
+                        />
+                        <Input
+                          placeholder="Purpose (optional)"
+                          value={newAccount.purpose}
+                          onChange={(e) =>
+                            setNewAccount({
+                              ...newAccount,
+                              purpose: e.target.value,
+                            })
+                          }
+                        />
+                        <div className="col-span-1 md:col-span-2">
+                          <Button onClick={handleSaveAccount}>
+                            {isEdit ? "Update Account" : "Add Account"}
+                          </Button>
+                        </div>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+
+        {/* Add New Account Dialog */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="mt-4">Add New Account</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <form className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <Input
+                placeholder="Nickname"
+                value={newAccount.nickname}
+                onChange={(e) =>
+                  setNewAccount({ ...newAccount, nickname: e.target.value })
+                }
+                required
+              />
+              <Input
+                placeholder="Account Number (optional)"
+                value={newAccount.accountNumber}
+                onChange={(e) =>
+                  setNewAccount({ ...newAccount, accountNumber: e.target.value })
+                }
+              />
+              <Input
+                placeholder="Account Title (optional)"
+                value={newAccount.accountTitle}
+                onChange={(e) =>
+                  setNewAccount({ ...newAccount, accountTitle: e.target.value })
+                }
+              />
+              <Input
+                placeholder="Purpose (optional)"
+                value={newAccount.purpose}
+                onChange={(e) =>
+                  setNewAccount({ ...newAccount, purpose: e.target.value })
+                }
+              />
+              <div className="col-span-1 md:col-span-2">
+                <Button onClick={handleSaveAccount}>
+                  {isEdit ? "Update Account" : "Add Account"}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

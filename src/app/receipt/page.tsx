@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState } from "react";
 import {
   Table,
@@ -14,8 +14,9 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"; /
 import { Input } from "@/components/ui/input";
 import { receiptData as initialReceiptData } from "@/data/Receipt";
 import { Receipt } from "@/types/Type";
+import { Typography } from "@/components/ui/Typography";
 
-const page = () => {
+const Page = () => { // Renamed from 'page' to 'Page'
   const [receipts, setReceipts] = useState<Receipt[]>(initialReceiptData);
   const [editReceipt, setEditReceipt] = useState<Receipt | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,6 +49,9 @@ const page = () => {
 
   return (
     <div>
+      <Typography variant="h1" className="mb-4 text-2xl font-semibold">
+        Bank Management
+      </Typography>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
@@ -179,4 +183,4 @@ const ReceiptForm: React.FC<ReceiptFormProps> = ({ receipt, onSave, onClose }) =
   );
 };
 
-export default page;
+export default Page; // Ensure the component is exported as 'Page'

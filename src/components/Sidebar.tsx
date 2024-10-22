@@ -1,60 +1,50 @@
-'use client'
+'use client';
 import React from "react";
 import {
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from "@/components/ui/command";
 import {
   LayoutDashboard,
-  Home,
-  Folders,
-  CreditCard,
-  Settings,
-  User,
   Banknote,
   Tag,
   FileText
-} from "lucide-react";
+} from "lucide-react"; // Removed unused imports
 import Link from "next/link";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import { useTheme } from "next-themes";
 
 const Sidebar = () => {
-  const {theme} = useTheme()
+  const { theme } = useTheme();
+  
   return (
     <Command 
-    className={
-      `${theme === 'dark'? 'bg-gray-700':'bg-gray-300 ' }  shadow-xl rounded-none`
-      // ''
-    }
-      >
-      <CommandInput placeholder="Type a command or search..." className={`bg-white  my-2 px-2`}/>
+      className={`${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-300'} shadow-xl rounded-none`}
+    >
+      <CommandInput placeholder="Type a command or search..." className="bg-white my-2 px-2" />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup className="">
+        <CommandGroup>
           <CommandItem>
-            <LayoutDashboard className="mr-2 w-4 h-4"/>
-             <Link href='/dashboard'>Dashboard</Link>
-            </CommandItem>
+            <LayoutDashboard className="mr-2 w-4 h-4" />
+            <Link href='/dashboard'>Dashboard</Link>
+          </CommandItem>
           <CommandItem>
-            <Banknote className="w-4 h-4 mr-2"/>
-             <Link href='bankmanagement'>Bank Management</Link>
-            </CommandItem>
+            <Banknote className="w-4 h-4 mr-2" />
+            <Link href='/bankmanagement'>Bank Management</Link>
+          </CommandItem>
           <CommandItem>
-            <Tag className="w-4 h-4 mr-2"/>
+            <Tag className="w-4 h-4 mr-2" />
             <Link href='/label'>Label Management</Link>
-            </CommandItem>
+          </CommandItem>
           <CommandItem>
-            <FileText className="w-4 h-4 mr-2"/>
-            <Link href='/receipt'>Reciept</Link>
-            </CommandItem>
+            <FileText className="w-4 h-4 mr-2" />
+            <Link href='/receipt'>Receipt</Link> {/* Fixed typo: 'Reciept' to 'Receipt' */}
+          </CommandItem>
         </CommandGroup>
         <CommandSeparator />
       </CommandList>
