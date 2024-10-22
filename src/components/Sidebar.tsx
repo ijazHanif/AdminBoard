@@ -41,10 +41,12 @@ const Sidebar = () => {
             <Tag className="w-4 h-4 mr-2" />
             <Link href='/label'>Label Management</Link>
           </CommandItem>
+        <Link href='/receipt'>
           <CommandItem>
             <FileText className="w-4 h-4 mr-2" />
-            <Link href='/receipt'>Receipt</Link> {/* Fixed typo: 'Reciept' to 'Receipt' */}
+            Receipt
           </CommandItem>
+        </Link> {/* Fixed typo: 'Reciept' to 'Receipt' */}
         </CommandGroup>
         <CommandSeparator />
       </CommandList>
